@@ -1,0 +1,11 @@
+# Binaries
+ayoindo
+ayoindo.exe
+
+# Environment
+.env
+
+# Go
+*.test
+*.out
+vendor/

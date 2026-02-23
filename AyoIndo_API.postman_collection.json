@@ -1,0 +1,331 @@
+{
+  "info": {
+    "_postman_id": "ayoindo-football-api",
+    "name": "AyoIndo Football API",
+    "description": "API documentation for AyoIndo Football Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/api/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"secret123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.data && json.data.token) {",
+                  "  pm.collectionVariables.set('token', json.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"secret123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/auth/me"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Teams",
+      "item": [
+        {
+          "name": "Get All Teams",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/teams",
+              "query": [{ "key": "city", "value": "Jakarta", "disabled": true }]
+            }
+          }
+        },
+        {
+          "name": "Create Team",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/api/teams",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Persija Jakarta\",\n  \"logo\": \"https://example.com/persija.png\",\n  \"founded_year\": 1928,\n  \"address\": \"Jl. Menteng Raya No.1\",\n  \"city\": \"Jakarta\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Team by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/teams/1"
+          }
+        },
+        {
+          "name": "Update Team",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/api/teams/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Persija Jakarta Updated\",\n  \"logo\": \"https://example.com/persija_new.png\",\n  \"founded_year\": 1928,\n  \"address\": \"Jl. Menteng Raya No.1\",\n  \"city\": \"Jakarta\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Team (Soft)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/teams/1"
+          }
+        },
+        {
+          "name": "Get Players by Team",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/teams/1/players"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Players",
+      "item": [
+        {
+          "name": "Get All Players",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/players",
+              "query": [
+                { "key": "team_id", "value": "1", "disabled": true },
+                { "key": "position", "value": "penyerang", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Player",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/api/players",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"team_id\": 1,\n  \"name\": \"Bambang Pamungkas\",\n  \"height\": 175.0,\n  \"weight\": 68.5,\n  \"position\": \"penyerang\",\n  \"jersey_number\": 20\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Player by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/players/1"
+          }
+        },
+        {
+          "name": "Update Player",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/api/players/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"team_id\": 1,\n  \"name\": \"Bambang Pamungkas\",\n  \"height\": 176.0,\n  \"weight\": 70.0,\n  \"position\": \"penyerang\",\n  \"jersey_number\": 9\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Player (Soft)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/players/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Matches",
+      "item": [
+        {
+          "name": "Get All Matches",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/matches",
+              "query": [{ "key": "status", "value": "scheduled", "disabled": true }]
+            }
+          }
+        },
+        {
+          "name": "Create Match",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/api/matches",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"home_team_id\": 1,\n  \"away_team_id\": 2,\n  \"match_date\": \"2025-03-15\",\n  \"match_time\": \"19:30\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Match by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/matches/1"
+          }
+        },
+        {
+          "name": "Update Match",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/api/matches/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"home_team_id\": 1,\n  \"away_team_id\": 2,\n  \"match_date\": \"2025-03-20\",\n  \"match_time\": \"20:00\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Match (Soft)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/matches/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Match Results",
+      "item": [
+        {
+          "name": "Submit Match Result",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/api/matches/1/result",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"home_score\": 2,\n  \"away_score\": 1,\n  \"goals\": [\n    { \"player_id\": 1, \"minute\": 23 },\n    { \"player_id\": 1, \"minute\": 67 },\n    { \"player_id\": 3, \"minute\": 45 }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Match Result",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/matches/1/result"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Get All Match Reports",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/reports/matches"
+          }
+        },
+        {
+          "name": "Get Match Report Detail",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/api/reports/matches/1"
+          }
+        }
+      ]
+    }
+  ]
+}
