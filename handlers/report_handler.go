@@ -17,18 +17,18 @@ type TopScorer struct {
 }
 
 type MatchReportData struct {
-	MatchID              uint              `json:"match_id"`
-	MatchDate            string            `json:"match_date"`
-	MatchTime            string            `json:"match_time"`
-	HomeTeam             *models.Team      `json:"home_team"`
-	AwayTeam             *models.Team      `json:"away_team"`
-	HomeScore            int               `json:"home_score"`
-	AwayScore            int               `json:"away_score"`
-	FinalStatus          string            `json:"final_status"`
-	Goals                []models.Goal     `json:"goals"`
-	TopScorers           []TopScorer       `json:"top_scorers"`
-	HomeTeamTotalWins    int64             `json:"home_team_total_wins"`
-	AwayTeamTotalWins    int64             `json:"away_team_total_wins"`
+	MatchID           uint          `json:"match_id"`
+	MatchDate         string        `json:"match_date"`
+	MatchTime         string        `json:"match_time"`
+	HomeTeam          *models.Team  `json:"home_team"`
+	AwayTeam          *models.Team  `json:"away_team"`
+	HomeScore         int           `json:"home_score"`
+	AwayScore         int           `json:"away_score"`
+	FinalStatus       string        `json:"final_status"`
+	Goals             []models.Goal `json:"goals"`
+	TopScorers        []TopScorer   `json:"top_scorers"`
+	HomeTeamTotalWins int64         `json:"home_team_total_wins"`
+	AwayTeamTotalWins int64         `json:"away_team_total_wins"`
 }
 
 // GetMatchReport godoc
