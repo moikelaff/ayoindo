@@ -11,7 +11,7 @@ A RESTful JSON API built with **Go (Golang)** + **GIN** framework for managing f
 | Language   | Go 1.24+                |
 | Framework  | GIN                     |
 | ORM        | GORM (with soft delete) |
-| Database   | PostgreSQL              |
+| Database   | PostgreSQL (Supabase) |
 | Auth       | JWT (HS256)             |
 | Password   | bcrypt                  |
 
@@ -54,30 +54,33 @@ ayoindo/
 
 ### 1. Prerequisites
 - Go 1.24+
-- PostgreSQL running locally
+- A [Supabase](https://supabase.com) project (or any PostgreSQL instance)
+- The `.env` file configured with your database credentials (see step 2)
 
 ### 2. Configure environment
 
-Copy `.env` and fill in your values:
+Create a `.env` file in the project root based on the template below.
+For **Supabase**, use the **Transaction Pooler** connection string (port `6543`):
 
 ```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=yourpassword
-DB_NAME=ayoindo_db
-JWT_SECRET=your_super_secret_jwt_key
+# Supabase (Transaction Pooler — port 6543)
+DB_HOST=aws-1-ap-southeast-2.pooler.supabase.com
+DB_PORT=6543
+DB_USER=postgres.<your-project-ref>
+DB_PASSWORD=<your-supabase-db-password>
+DB_NAME=postgres
+
+# Auth
+JWT_SECRET=<your-strong-secret-min-32-chars>
+
+# Server
 GIN_MODE=debug
 PORT=8080
 ```
 
-### 3. Create database
+> ⚠️ **Never commit `.env` to Git.** It is already listed in `.gitignore`.
 
-```sql
-CREATE DATABASE ayoindo_db;
-```
-
-### 4. Run the server
+> ℹ️ For a local PostgreSQL instance instead, set `DB_HOST=localhost`, `DB_PORT=5432`, `DB_NAME=ayoindo_db`, and `sslmode` can be changed to `disable` in `config/database.go`.
 
 ```bash
 go run main.go
